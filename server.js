@@ -6,7 +6,8 @@
 require("dotenv").config();
 
 // pull PORT and MONGODB_URL from .env
-const { PORT, MONGODB_URL } = process.env;
+const { MONGODB_URL } = process.env;
+const PORT = process.env.PORT || 4000;
 
 // import express
 const express = require("express");
@@ -77,13 +78,11 @@ app.get("/content" , async (req, res) => {
     }
 })
 
-// New Route
-
 // Delete Route
 
 app.delete("content/:id" , async (req, res) => {
     try {
-        // send all contend
+        // send all content
         res.json(await Content.findByIdAndRemove(req.params.id))
     } catch (error) {
         // send error
@@ -93,6 +92,18 @@ app.delete("content/:id" , async (req, res) => {
 
 
 // Update Route
+
+app.put("/content/:id" , async (req, res)=> {
+    try {
+        // send all people
+        res.json(
+            await Content.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        )
+    } catch (error) {
+        // send error
+        res.status(400).json(error)
+    }
+})
 
 // Create Route
 
@@ -105,14 +116,9 @@ app.post("/content" , async(req, res) => {
     }
 })
 
-// Edit Route
-
-// Show Route
-
-
 ///////////////////////////////
 // LISTENER
 ////////////////////////////////
-app.listen(PORT, () => {
+app.listen(PORT || 4000, () => {
   console.log(`listening on PORT... ${PORT}`);
 });
